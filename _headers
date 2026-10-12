@@ -1,0 +1,7 @@
+# Mockup: keep it out of Google so it doesn't compete with millerpoolandspausa.com.
+# Delete this block when this becomes the live site.
+/*
+  X-Robots-Tag: noindex, nofollow
+
+/assets/*
+  Cache-Control: public, max-age=3600

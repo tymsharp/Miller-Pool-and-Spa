@@ -1,0 +1,5 @@
+# Makes the site work when the Cloudflare build output directory is left at the
+# repo root. Clean URLs are rewritten to the files in public/. If the output
+# directory is set to "public", this file is not deployed and has no effect.
+/public/*  /:splat          301
+/*         /public/:splat   200

@@ -1,6 +1,8 @@
 # Miller Pool and Spa site (mockup)
 
-Static site. No build step on the host. `public/` is what gets served.
+Static site. No build step on the host. `public/` is the site.
+
+The root `_redirects` and `_headers` files make it work even when the Cloudflare build output directory is left at `/` (clean URLs are rewritten to `public/`). If the output directory is set to `public`, they are simply not deployed.
 
 ## Cloudflare Pages
 - Framework preset: None
