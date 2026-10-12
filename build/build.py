@@ -27,7 +27,7 @@ def href(slug, anchor=None):
 
 def aid(slug, name):
     """Element id that stays unique when every page shares one file."""
-    return f"{name}-{slug or 'home'}"
+    return f"{name}-{(slug or 'home').replace('/', '-')}"
 
 def logo_src():
     if MODE == "preview":
@@ -200,6 +200,25 @@ table.zips td:first-child{font-weight:900;font-variant-numeric:tabular-nums;whit
 .prose p{color:var(--muted)}
 .prose h3{margin-top:12px}
 
+/* blog */
+.posts{max-width:70ch;margin-top:28px}
+.posts article{padding-block:22px;border-top:1px solid var(--line)}
+.posts h2{font-size:22px;margin-top:4px}
+.posts h2 a{color:var(--ink);text-decoration:none}
+.posts h2 a:hover{color:var(--blue)}
+.posts p{color:var(--muted);margin-top:6px}
+.post-meta{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.post-meta a{color:var(--muted)}
+.post{max-width:70ch;display:grid;gap:16px}
+.post h2{font-size:24px;margin-top:14px}
+.post ul,.post ol{display:grid;gap:6px}
+.post table{border-collapse:collapse;width:100%;font-size:16px}
+.post th,.post td{text-align:left;padding:10px 12px 10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.post th{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.post td:first-child{font-weight:700}
+.post td:last-child{white-space:nowrap;font-variant-numeric:tabular-nums}
+.post-related{padding:16px 18px;background:var(--sky);border-radius:4px;margin-top:8px}
+
 /* footer */
 footer{background:var(--blue-dark);color:#c9dde9;padding-block:36px;font-size:15px}
 footer .wrap{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
@@ -247,6 +266,7 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.15);paddin
   .nearby,.svc,.cities{grid-template-columns:1fr}
   footer .wrap{grid-template-columns:1fr}
   .mbar{display:flex}
+  .post td:nth-child(2),.post th:nth-child(2){display:none}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 """
@@ -378,6 +398,7 @@ def header():
       <a href="{href('service-areas')}">Service Area</a>
       <a href="{href('reviews')}">Reviews</a>
       <a href="{href('about')}">About</a>
+      <a href="{href('blog')}">Blog</a>
       <a href="{href('contact')}">Contact</a>
     </nav>
     <div class="hdr-call">
@@ -415,6 +436,7 @@ def footer():
         <li><a href="{href('pool-service-thousand-oaks')}">Weekly pool service</a></li>
         <li><a href="{href('about')}">About</a></li>
         <li><a href="{href('reviews')}">Reviews</a></li>
+        <li><a href="{href('blog')}">Blog</a></li>
         <li><a href="{href('contact')}">Contact</a></li>
       </ul>
     </div>
@@ -458,7 +480,7 @@ def hero(slug, h1, lede, note, caption, secondary=None, rating=True):
 </section>"""
 
 def band(items=None):
-    items = items or ["Licensed &amp; insured", "Based in Newbury Park", "700+ pools serviced across Ventura and LA County", "Price quoted before work starts"]
+    items = items or ["Licensed &amp; insured", "Based in Newbury Park", "Repair techs on staff", "Price quoted before work starts"]
     return '<div class="band"><div class="wrap"><ul>' + "".join(f"<li>{i}</li>" for i in items) + "</ul></div></div>"
 
 def section(inner, cls="", sid=None):
@@ -581,7 +603,7 @@ GENERAL_FAQ = [
 def build_pages():
     # ---------- Home
     body = hero("", "Pool service and repair in Thousand Oaks and the Conejo Valley",
-        "Miller Pool and Spa has cleaned and repaired pools across Ventura and Los Angeles County for more than ten years. More than 700 pools on weekly service, and repair techs on staff for pumps, heaters, filters, salt systems and leaks.",
+        "Miller Pool and Spa cleans and repairs pools across Ventura and Los Angeles County. Weekly service routes, and repair techs on staff for pumps, heaters, filters, salt systems and leaks.",
         "Based in Newbury Park. Repair calls welcome from any pool owner in our service area, weekly customer or not.",
         "clear backyard pool in Thousand Oaks, Miller truck in the driveway",
         secondary=("Request service", "#" + aid("", "request")))
@@ -594,11 +616,8 @@ def build_pages():
   <div>{photo('pressure-testing rig hooked to a skimmer line')}<h3>Leak detection</h3><p>Pressure testing and dye testing to find the leak before anything gets dug up. Most leaks are at the equipment, the skimmer or the light.</p><a class="more" href="{href('pool-leak-detection')}">Leak detection</a></div>
 </div>
 <p class="brand-line">Also <a href="{href('green-pool-cleanup')}">green pool cleanups</a>, new equipment installs, and most major brands: Pentair, Hayward, Jandy and Raypak.</p>""")
-    body += city_grid("We're based in Newbury Park. Phase one covers the Conejo Valley, Simi Valley and Camarillo.")
+    body += city_grid("We're based in Newbury Park and cover the Conejo Valley, Simi Valley and Camarillo.")
     body += reviews_section(["andreas", "michael"])
-    body += section(row("Parker with the crew and a truck, Newbury Park yard", "About Miller Pool and Spa",
-        ["Mason Miller learned pool work from his father and started this company on his own, cleaning and repairing pools around Newbury Park. It grew by referral into a crew serving homeowners across Ventura and Los Angeles County.",
-         f'In 2026 Parker took over ownership and has been bringing other local pool companies under the Miller name. The trucks still roll out of Newbury Park every morning. <a href="{href("about")}">More about us</a>'], cls="tall"))
     body += request_section("", "Get in touch", "Call, text or send the form. We call back to schedule.")
     add("", "Pool Service and Repair in Thousand Oaks | Miller Pool and Spa",
         "Pool repair and weekly pool service in Thousand Oaks, Newbury Park and the Conejo Valley. Pumps, heaters, filters, salt systems and leak detection. Call (805) 492-6991.", body)
@@ -773,7 +792,7 @@ def build_pages():
     # ---------- City pages
     cities = [
         dict(slug="pool-repair-thousand-oaks", city="Thousand Oaks", h1="Pool repair in Thousand Oaks and Newbury Park",
-             lede="Pump won't turn on? Heater throwing a code? Water level dropping every day? Miller Pool and Spa has been repairing pool equipment in the Conejo Valley for more than ten years. A tech comes out, finds the problem, and gives you a price before any work starts.",
+             lede="Pump won't turn on? Heater throwing a code? Water level dropping every day? Miller Pool and Spa repairs pool equipment across the Conejo Valley. A tech comes out, finds the problem, and gives you a price before any work starts.",
              caption="Miller tech at an equipment pad in Thousand Oaks (pump, filter, heater in frame)",
              order=["pump", "heater", "filter", "leak", "salt", "auto", "green", "install"],
              row2=("salt cell with scale buildup", "We know Conejo Valley water",
@@ -864,9 +883,6 @@ def build_pages():
             row(cap2, h2_, ps2, flip=True), "sky")
         body += request_section(slug, cities=", ".join(n for n in [c["city"]] + [html.unescape(n.split(" &amp; ")[0]) for _, n in c["nearby"]][:4]))
         body += reviews_section(["andreas", "michael", "jeannie", "jayne"], more=False)
-        body += section(row("Parker with the crew and a truck, Newbury Park yard", "About Miller Pool and Spa",
-            ["Mason Miller learned pool work from his father and started this company on his own, cleaning and repairing pools around Newbury Park. It grew by referral into a crew serving homeowners across Ventura and Los Angeles County, and it's been at it for more than ten years.",
-             "In 2026 Parker took over ownership and has been bringing other local pool companies under the Miller name. The trucks still roll out of Newbury Park every morning, and the job is the same as it was on day one: show up when we say we will, fix it right, and charge what we quoted."], cls="tall"))
         body += zips_section(f"Where we work in {c['city']}", c["drive"], c["zips"], c["nearby"])
         body += faq_section(faq, "Pool repair questions")
         ld = [{"@type": "Service", "name": f"Pool Repair in {c['city']}", "serviceType": "Pool equipment repair", "provider": {"@id": BASE + "/#business"},
@@ -877,11 +893,11 @@ def build_pages():
     # ---------- Weekly service
     slug = "pool-service-thousand-oaks"
     body = hero(slug, "Weekly pool service in Thousand Oaks",
-        "Same tech, same day every week. Water tested and balanced, pool brushed and skimmed, baskets emptied, equipment checked. More than 700 pools in the Conejo Valley are on our routes, and you can pay online.",
+        "Same tech, same day every week. Water tested and balanced, pool brushed and skimmed, baskets emptied, equipment checked. Our routes run across the Conejo Valley, and you can pay online.",
         "Routes run through Thousand Oaks, Newbury Park, Westlake Village, Oak Park, Agoura Hills, Moorpark, Simi Valley and Camarillo.",
         "tech skimming a pool, Miller truck visible through the side gate",
         secondary=("Get a service quote", "#" + aid(slug, "request")))
-    body += band(["Same day, same tech each week", "Pay online", "Repair techs on the same team", "700+ pools on service"])
+    body += band(["Same day, same tech each week", "Pay online", "Repair techs on the same team", "Chemicals included"])
     body += section(f"""
 <h2>What a visit includes</h2>
 <div class="row" style="margin-top:28px">
@@ -915,7 +931,7 @@ def build_pages():
     body += faq_section(svc_faq, "Weekly service questions")
     body += request_section(slug, "Get a service quote", "Call, text or send the form with your address and we'll come take a look.", default_issue="Weekly service quote", cls="sky")
     add(slug, "Weekly Pool Service in Thousand Oaks | Miller Pool and Spa",
-        "Weekly pool service in Thousand Oaks and Newbury Park. Same tech every week, water balanced, equipment checked, pay online. 700+ pools in the Conejo Valley. (805) 492-6991.",
+        "Weekly pool service in Thousand Oaks and Newbury Park. Same tech every week, water balanced, equipment checked, pay online. (805) 492-6991.",
         body, [service_ld("Weekly pool service", slug), faq_ld(svc_faq)])
 
     # ---------- About
@@ -923,12 +939,11 @@ def build_pages():
     body = section(f"""
 <div class="row">
   <div class="prose">
-    <h1>About Miller Pool and Spa</h1>
-    <p>Mason Miller learned pool work from his father and started this company on his own, cleaning and repairing pools around Newbury Park. It grew by referral into a crew serving homeowners across Ventura and Los Angeles County, and it's been at it for more than ten years.</p>
-    <p>In 2026 Parker took over ownership and has been bringing other local pool companies under the Miller name. The trucks still roll out of Newbury Park every morning, and the job is the same as it was on day one: show up when we say we will, fix it right, and charge what we quoted.</p>
-    <p>Today the company looks after more than 700 pools on weekly service and runs repair techs across the Conejo Valley, Simi Valley and Camarillo.</p>
+    <h1>A Newbury Park pool company</h1>
+    <p>Mason Miller learned pool work from his father and started this company on his own, cleaning and repairing pools around Newbury Park. It grew by referral into a crew serving homeowners across Ventura and Los Angeles County.</p>
+    <p>The job is the same as it was on day one: show up when we say we will, fix it right, and charge what we quoted. Weekly service routes and repair techs run through the Conejo Valley, Simi Valley and Camarillo.</p>
   </div>
-  {photo('Parker with the crew and a truck, Newbury Park yard', 'tall')}
+  {photo('the crew with a truck in the Newbury Park yard', 'tall')}
 </div>""", "", None)
     body += section(
         row("tech handing a written quote to a homeowner", "How we work",
@@ -939,8 +954,8 @@ def build_pages():
             ["Customers mention our techs by name in reviews, which is the best kind of review. Jon and Jarett run a lot of the leak detection work. The office answers the phone during the day and calls back if you leave a message.",
              f'<a href="{href("reviews")}">Read the reviews</a> or <a href="{href("contact")}">get in touch</a>.'], flip=True), "sky")
     body += request_section(slug, "Get in touch", "Call, text or send the form. We call back to schedule.")
-    add(slug, "About Miller Pool and Spa | Newbury Park, CA",
-        "Miller Pool and Spa was founded by Mason Miller in Newbury Park and has served the Conejo Valley for more than ten years. Now under Parker's ownership. 700+ pools serviced.", body)
+    add(slug, "About Us | Miller Pool and Spa, Newbury Park, CA",
+        "Miller Pool and Spa was founded by Mason Miller in Newbury Park. Pool repair and weekly pool service across the Conejo Valley, Simi Valley and Camarillo.", body)
 
     # ---------- Contact
     slug = "contact"
@@ -989,6 +1004,136 @@ def build_pages():
 </div>""", "sky")
     body += request_section(slug, "Get in touch", "Call, text or send the form. We call back to schedule.")
     add(slug, "Service Area | Miller Pool and Spa", "Miller Pool and Spa serves Thousand Oaks, Newbury Park, Westlake Village, Oak Park, Agoura Hills, Simi Valley, Camarillo, Calabasas and Hidden Hills. Based in Newbury Park.", body)
+
+    # ---------- Blog
+    posts = [
+        dict(slug="pool-heater-repair-cost", title="What a pool heater repair costs in the Conejo Valley",
+             summary="Most heater calls end with a sensor or a switch. A few end with the exchanger. Here is what each one typically runs, and when a new heater is the better buy.",
+             related=("pool-heater-repair", "Pool heater repair"), issue="Heater",
+             body=f"""
+<p>Most heater calls end with a small part. A few end with a conversation about a new heater. The difference is usually the age of the unit and what the error code points to, so here is how the price breaks down before anyone takes the panel off.</p>
+<h2>The diagnosis comes first</h2>
+<p>A service call covers the visit and the test. If the display shows a code, write it down or take a photo. It shortens the diagnosis. Before blaming the heater, a tech checks flow. A dirty filter, a closed valve or a pump running too slow will trip the pressure switch and shut the heater down, and that is a filter cleaning or a valve, not a heater repair.</p>
+<h2>Small, medium and large</h2>
+<p>These are typical ranges for parts and labor on residential gas heaters in our area. Your quote depends on the brand, the model and what the tech finds once the panel is off.</p>
+<table>
+<thead><tr><th>Repair</th><th>What it fixes</th><th>Typical range</th></tr></thead>
+<tbody>
+<tr><td>Ignitor, flame sensor or thermistor</td><td>Won't light, lights then quits, wrong temperature reading</td><td>$150 to $400</td></tr>
+<tr><td>Pressure switch or flow switch</td><td>Low flow or pressure errors when the filter is clean</td><td>$150 to $350</td></tr>
+<tr><td>Gas valve</td><td>No gas to the burners, or the flame drops out</td><td>$300 to $600</td></tr>
+<tr><td>Control board or display</td><td>Dead panel, random codes, buttons that do nothing</td><td>$400 to $900</td></tr>
+<tr><td>Heat exchanger</td><td>Leaks, soot, rust, or a heater that takes forever</td><td>$1,200 to $2,500</td></tr>
+<tr><td>New gas heater, installed</td><td>Replacement for a unit that isn't worth fixing</td><td>$3,500 to $6,000 and up</td></tr>
+</tbody></table>
+<p>The first two rows cover most calls. Boards and gas valves are the middle. The heat exchanger is the one to think about, because on a heater more than ten or twelve years old it costs close to what a new heater does.</p>
+<h2>When replacement wins</h2>
+<p>Three things push the answer toward a new heater: the unit is past ten years, the failed part is the exchanger or the board, and the heater was undersized for the spa to begin with. A new 400,000 BTU heater from Raypak, Pentair, Hayward or Jandy heats faster, burns less gas and comes with a warranty. If the gas line or the vent needs work to meet code, that adds to the install, and the quote will say so.</p>
+<p>If the heater is under ten years old and the repair is a board or a valve, fix it. Those heaters have a lot of life left.</p>
+<h2>Why heaters fail early here</h2>
+<p>Conejo Valley water is hard. Calcium drops out inside the exchanger tubes and builds a layer that slows heat transfer, so the heater runs longer and hotter to do the same job. Low pH does the opposite damage and eats the copper. Keeping calcium and pH balanced is the cheapest way to make a heater last. A clean filter is next, because a heater that sees proper flow doesn't cycle on its pressure switch all day.</p>
+<p>Run the heater now and then in the off-season too. Spiders and corrosion get into burners that sit for months.</p>"""),
+
+        dict(slug="hayward-aquarite-lights", title="Reading the lights on a Hayward AquaRite salt system",
+             summary="The AquaRite's panel tells you most of what's wrong. Here is what each light means, and what to check before you buy salt or a new cell.",
+             related=("salt-system-repair", "Salt system repair"), issue="Salt system",
+             body=f"""
+<p>The Hayward AquaRite is the salt system on more Conejo Valley pools than any other, and its front panel tells you most of what's wrong if you know how to read it. Here is what each light means and what to do before you buy anything.</p>
+<h2>Check salt, or low salt</h2>
+<p>The AquaRite doesn't measure salt directly. It measures how well the water conducts electricity through the cell and reads that as salt. Two things fool it. Cold water conducts less, so from about November to March the panel reads low even when the salt is fine. And a worn or scaled cell conducts less, which also looks like low salt.</p>
+<p>So before adding salt, test the water. A salt test strip or a sample at a pool store gives you the real number. The AquaRite wants 2,700 to 3,400 ppm, with 3,200 as the target. If the test says the salt is fine and the panel says it isn't, the problem is the cell or the water temperature, and bags of salt won't help. They'll just leave you with a salty pool.</p>
+<h2>Inspect cell</h2>
+<p>This one isn't a fault. The system turns it on every 500 hours of operation as a reminder. Pull the cell and look through it. White crust on the plates is calcium scale, which is normal in our hard water and comes off with a diluted muriatic acid soak. Pour acid into water, never the other way, soak until the foaming stops, rinse and reinstall. If the plates are clean, put it back. Hold the diagnostic button for about three seconds to clear the light.</p>
+<p>Scale left on the plates makes the cell work harder and shortens its life, so cleaning every three months is a good habit here.</p>
+<h2>No flow</h2>
+<p>The cell only makes chlorine when the flow switch confirms water is moving. If the light is on with the pump running, check the filter pressure first. A dirty filter, a closed valve or air in the line drops flow below what the switch wants. If flow is fine, the switch paddle may be stuck or the switch has failed. Either way, no chlorine is being made until it's fixed, and the pool will show it within a week in summer.</p>
+<h2>High salt</h2>
+<p>Usually the result of adding salt for a low salt light that was really a cold-water or worn-cell reading. The only fix is to drain some water and refill. Test first, add later.</p>
+<h2>The cell itself</h2>
+<p>A T-Cell-15 is rated for about 10,000 hours, which works out to three to five years at normal run times, less when scale is left on the plates. The diagnostic display shows the cell's voltage and amperage, and a cell drawing low current with the salt at the right level is a cell that's wearing out. A tech can tell from those numbers whether you need a new cell or just a cleaning.</p>
+<h2>One more thing: stabilizer</h2>
+<p>A salt pool with no chlorine reading and a healthy cell often has a stabilizer problem. Hayward recommends cyanuric acid between 60 and 80 ppm for salt pools. Too little and the sun burns off chlorine as fast as the cell makes it. Years of tablets before the salt conversion can push it well past 100, where the chlorine is there but tied up. A partial drain is the only fix for that.</p>"""),
+
+        dict(slug="how-to-clear-a-green-pool", title="How to clear a green pool, and when to stop and call",
+             summary="Something stopped before the pool turned. Fix that first, then brush, shock and filter in the right order. And know when a drain is the cheaper answer.",
+             related=("green-pool-cleanup", "Green pool cleanup"), issue="Green pool",
+             body=f"""
+<p>A pool goes green for one reason: chlorine stopped keeping up. Something behind that stopped first, usually the pump, the filter or the chlorinator, and if you don't fix that part the pool will be green again in a month. Here is the order of operations, and the point where it's cheaper to call.</p>
+<h2>1. Find out what stopped</h2>
+<p>Is the pump running? Is the filter pressure normal, or pinned high? Is the chlorinator empty, or the salt cell showing a fault? Fix the equipment first. Shocking a pool with no circulation wastes the chlorine.</p>
+<h2>2. Test before you treat</h2>
+<p>Free chlorine, pH and stabilizer (cyanuric acid). Stabilizer decides the plan. If it's over about 100 ppm, chlorine can't work no matter how much you add, and the fix is a partial drain and refill. Years of tablets do this. If stabilizer is reasonable, you can treat the pool where it stands.</p>
+<h2>3. Brush, then shock</h2>
+<p>Brush the walls, steps and corners so the algae is in the water where chlorine can reach it. Then add liquid chlorine, not tablets. A rough starting dose for a light green pool is a gallon of 12.5 percent liquid chlorine per 10,000 gallons, added in the evening with the pump running. Test the next morning. If the chlorine is gone, the algae ate it, so dose again. You're done shocking when the water holds chlorine overnight.</p>
+<h2>4. Run the pump around the clock and clean the filter</h2>
+<p>Dead algae clogs the filter fast. Watch the pressure gauge and clean the cartridge or backwash whenever it climbs eight to ten psi over clean, which may be daily for a few days. If you have a multiport valve, vacuum the dead algae to waste so it never hits the filter at all. Gray, cloudy water after the green is gone is a filtration problem, not a chemical one. Keep filtering.</p>
+<h2>5. Expect a few days</h2>
+<p>Light green with working equipment clears in three to five days. Dark green takes a week or more. Black algae rooted in the plaster is a different problem that needs scrubbing and spot treatment, and a pool that sat swampy for months is often cheaper to drain and acid wash than to fight.</p>
+<h2>When to call</h2>
+<ul>
+<li>The pump, filter or chlorinator isn't working. That's a repair before it's a cleanup.</li>
+<li>Stabilizer is over 100 ppm. Draining a pool safely takes more than a hose, especially with old plaster or a high water table.</li>
+<li>You can't see the bottom. That's a safety problem as much as a water problem.</li>
+<li>You've shocked twice and it's still green. Phosphates or stabilizer are probably why, and a test will say which.</li>
+<li>The algae is black, or the pool was green for months.</li>
+</ul>
+<p>Once the water is clear, get the cause fixed, or you'll be reading this again next summer.</p>"""),
+
+        dict(slug="pool-leak-bucket-test", title="The bucket test: is your pool leaking or just evaporating?",
+             summary="A bucket, a marker and 24 hours tell you whether the pool is leaking. Here is how to run the test and what the result means.",
+             related=("pool-leak-detection", "Leak detection"), issue="Losing water / leak",
+             body=f"""
+<p>Every pool loses water. In Conejo Valley summer heat with a little wind, a quarter inch a day is normal evaporation, and a heated spa or a Santa Ana week can double that. The bucket test tells you in a day whether what you're seeing is weather or a leak, and it costs nothing.</p>
+<h2>The test</h2>
+<ol>
+<li>Fill the pool to its normal level and turn off the autofill if you have one.</li>
+<li>Set a bucket on the second step and fill it so the water inside matches the pool level outside. Weigh it down with a brick if it floats.</li>
+<li>Mark the water level inside the bucket and on the outside of the bucket with tape or a marker.</li>
+<li>Turn the pump off and wait 24 hours. No swimming.</li>
+<li>Compare the two marks. Evaporation lowers both the same. If the pool dropped more than the bucket did, you have a leak.</li>
+<li>Repeat with the pump running for 24 hours.</li>
+</ol>
+<h2>Reading the result</h2>
+<p>If the pool loses more with the pump off than on, the leak is on the suction side or in the shell: a skimmer throat, the light niche, a return fitting or a crack. If it loses more with the pump running, the leak is on the pressure side, in the plumbing between the pump and the returns, which is often underground. The same loss either way points to the shell. Those three answers are what a leak tech wants to know on the phone.</p>
+<h2>Where leaks usually are</h2>
+<p>The equipment pad first: a weeping pump seal, a filter drain plug, a heater that drips when it's running. Then the skimmer, where the plastic throat meets the concrete. Then the light niche and the conduit behind it. Returns and spa spillovers after that. Cracks in the shell and underground plumbing are last on the list, which is why most leak repairs never touch the deck.</p>
+<h2>Other signs</h2>
+<ul>
+<li>The autofill runs all the time.</li>
+<li>Air bubbles at the returns, or air under the pump lid, with the water level fine. A suction leak pulls air in when the pump is on and lets water out when it's off.</li>
+<li>Wet or soft ground near the pad or along the deck edge.</li>
+<li>Chemistry that won't hold, because fresh fill water keeps diluting it.</li>
+</ul>
+<h2>What to do next</h2>
+<p>Keep the water above the skimmer so the pump doesn't run dry, and keep filling until it's fixed. Leak detection is pressure testing on each line and dye testing around the fittings, and when the leak is at the pad or the skimmer, which it usually is, the repair is often the same visit.</p>"""),
+    ]
+    POST_DATE, POST_DATE_TEXT = "2026-10-12", "October 2026"
+    for p in posts:
+        pslug = f"blog/{p['slug']}"
+        rel_s, rel_n = p["related"]
+        body = section(f"""
+<article class="post">
+  <p class="post-meta"><a href="{href('blog')}">Blog</a> &nbsp;·&nbsp; {POST_DATE_TEXT}</p>
+  <h1>{p['title']}</h1>
+  <p class="lede">{p['summary']}</p>
+  {p['body']}
+  <p class="post-related">Related: <a href="{href(rel_s)}">{rel_n}</a> in Thousand Oaks and the Conejo Valley. Questions about your pool? <a href="{href('contact')}">Send us the details</a>.</p>
+</article>""")
+        body += request_section(pslug, "Want a tech to look at it?", "Call, text or send the form. We call back to schedule a visit.", default_issue=p["issue"], cls="sky")
+        ld = [{"@type": "BlogPosting", "headline": p["title"], "description": p["summary"], "datePublished": POST_DATE, "dateModified": POST_DATE,
+               "author": {"@type": "Organization", "name": "Miller Pool and Spa"}, "publisher": {"@id": BASE + "/#business"},
+               "mainEntityOfPage": f"{BASE}/{pslug}/", "url": f"{BASE}/{pslug}/"}]
+        add(pslug, f"{p['title']} | Miller Pool and Spa", p["summary"], body, ld)
+
+    items = "".join(f"""<article><p class="post-meta">{POST_DATE_TEXT}</p><h2><a href="{href('blog/' + p['slug'])}">{p['title']}</a></h2><p>{p['summary']}</p></article>""" for p in posts)
+    body = section(f"""
+<h1>Blog</h1>
+<p class="lede max mt">Practical notes from our techs on pumps, heaters, salt systems, leaks and green pools, written for pool owners in the Conejo Valley.</p>
+<div class="posts">{items}</div>""")
+    body += request_section("blog", "Have a question we haven't covered?", "Call, text or send the form. If it's one we hear a lot, it'll end up here.", cls="sky")
+    add("blog", "Blog | Miller Pool and Spa", "Practical notes on pool pumps, heaters, salt systems, leak detection and green pools from Miller Pool and Spa in Newbury Park.", body,
+        [{"@type": "Blog", "name": "Miller Pool and Spa blog", "url": f"{BASE}/blog/", "publisher": {"@id": BASE + "/#business"},
+          "blogPost": [{"@type": "BlogPosting", "headline": p["title"], "url": f"{BASE}/blog/{p['slug']}/", "datePublished": POST_DATE} for p in posts]}])
 
     # ---------- Privacy (short placeholder, real sites have one)
     slug = "privacy-policy"

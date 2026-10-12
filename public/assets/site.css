@@ -159,6 +159,25 @@ table.zips td:first-child{font-weight:900;font-variant-numeric:tabular-nums;whit
 .prose p{color:var(--muted)}
 .prose h3{margin-top:12px}
 
+/* blog */
+.posts{max-width:70ch;margin-top:28px}
+.posts article{padding-block:22px;border-top:1px solid var(--line)}
+.posts h2{font-size:22px;margin-top:4px}
+.posts h2 a{color:var(--ink);text-decoration:none}
+.posts h2 a:hover{color:var(--blue)}
+.posts p{color:var(--muted);margin-top:6px}
+.post-meta{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.post-meta a{color:var(--muted)}
+.post{max-width:70ch;display:grid;gap:16px}
+.post h2{font-size:24px;margin-top:14px}
+.post ul,.post ol{display:grid;gap:6px}
+.post table{border-collapse:collapse;width:100%;font-size:16px}
+.post th,.post td{text-align:left;padding:10px 12px 10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.post th{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.post td:first-child{font-weight:700}
+.post td:last-child{white-space:nowrap;font-variant-numeric:tabular-nums}
+.post-related{padding:16px 18px;background:var(--sky);border-radius:4px;margin-top:8px}
+
 /* footer */
 footer{background:var(--blue-dark);color:#c9dde9;padding-block:36px;font-size:15px}
 footer .wrap{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
@@ -206,5 +225,6 @@ footer .legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.15);paddin
   .nearby,.svc,.cities{grid-template-columns:1fr}
   footer .wrap{grid-template-columns:1fr}
   .mbar{display:flex}
+  .post td:nth-child(2),.post th:nth-child(2){display:none}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
